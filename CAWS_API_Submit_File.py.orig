@@ -1,0 +1,134 @@
+'''
+import requests
+
+url = "http://apibeta.nsslabs.com/Scan/file/"
+
+#payload = "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"File\"; filename=\"User Profiles.docx\"\r\nContent-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document\r\n\r\n\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--"
+
+payload = """------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; 
+name=\"File\"; 
+filename=\"User Profiles.docx\"\r\n
+Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document\r\n\r\n\r\n
+------WebKitFormBoundary7MA4YWxkTrZu0gW--"""
+
+payload = """Content-Disposition: form-data; 
+name=\"File\"; 
+filename=\"User Profiles.docx\"\r\n
+Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document\r\n
+"""
+
+
+headers = {
+    'content-type': "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+    'authorization': "Basic cGF0ZWxsYWJzOjI5OTJBMkQ0OEVEOTQyQTJBMzU5NkQ3NjJBNDQxNUJD",
+    'cache-control': "no-cache"
+    #'postman-token': "4b0d4c40-b023-5079-99ac-43bfb578ebc5"
+    }
+
+response = requests.request("POST", url, data=payload, headers=headers)
+
+
+print(response.text)
+'''
+
+import requests
+
+url = "http://apibeta.nsslabs.com/Scan/file/"
+
+payload = "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"File\"; filename=\"UserProfiles.docx\"\r\nContent-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document\r\n\r\n\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--"
+headers = {
+    'content-type': "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+    'authorization': "Basic cGF0ZWxsYWJzOjI5OTJBMkQ0OEVEOTQyQTJBMzU5NkQ3NjJBNDQxNUJD",
+    'cache-control': "no-cache"
+    }
+
+response = requests.request("POST", url, data=payload, headers=headers)
+print "Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : "
+print(response.text)
+
+
+import requests
+
+url = "http://apibeta.nsslabs.com/Scan/Status/file/2E58D72FC01544F8A1C67C5925C0D7D3"
+
+headers = {
+    'authorization': "Basic cGF0ZWxsYWJzOjI5OTJBMkQ0OEVEOTQyQTJBMzU5NkQ3NjJBNDQxNUJD",
+    'cache-control': "no-cache"
+    #'postman-token': "6a8adf33-26a7-99b5-f5e7-664e14f66e63"
+    }
+
+response = requests.request("GET", url, headers=headers)
+
+print "Response for the http://apibeta.nsslabs.com/Scan/Status/file/{token=2E58D72FC01544F8A1C67C5925C0D7D3} request which returns MD5hash and status : "
+print(response.text)
+
+import requests
+
+url = "http://apibeta.nsslabs.com/users/files/6586E4C713B4E6877BB7A8A5AAE48B0E"
+
+payload = "file=%2FUsers%2Fapatel%2FDocuments%2FCAWS%2FCAWS%20Use%20Test%20Cases.xlsx"
+headers = {
+    'authorization': "Basic cGF0ZWxsYWJzOjI5OTJBMkQ0OEVEOTQyQTJBMzU5NkQ3NjJBNDQxNUJD",
+    'cache-control': "no-cache"
+    #'postman-token': "6fc3f1b5-6c0f-d3c7-3e74-1f0acdb85844"
+    }
+
+response = requests.request("GET", url, data=payload, headers=headers)
+
+print "Response for the http://apibeta.nsslabs.com/Scan/Status/file/{md5hash=6586E4C713B4E6877BB7A8A5AAE48B0E} request which returns details on submitted file. : "
+print(response.text)
+
+import requests
+
+url = "http://apibeta.nsslabs.com/Scan/url/"
+
+payload = "url=http%3A%2F%2Fabcd.com&url=http%3A%2F%2Fxyz.com"
+headers = {
+    'authorization': "Basic cGF0ZWxsYWJzOjI5OTJBMkQ0OEVEOTQyQTJBMzU5NkQ3NjJBNDQxNUJD",
+    'content-type': "application/x-www-form-urlencoded",
+    'cache-control': "no-cache"
+    #'postman-token': "326ebc98-0eae-8709-deb5-adcec4ea9914"
+    }
+
+response = requests.request("POST", url, data=payload, headers=headers)
+print "Response for the submit URL http://apibeta.nsslabs.com/Scan/url/ request which returns tokens."
+print(response.text)
+
+import requests
+
+url = "http://apibeta.nsslabs.com/Scan/Status/url/634DF6E7AC6742B187EC945871EBE4DC"
+
+headers = {
+    'authorization': "Basic cGF0ZWxsYWJzOjI5OTJBMkQ0OEVEOTQyQTJBMzU5NkQ3NjJBNDQxNUJD",
+    'cache-control': "no-cache"
+    #'postman-token': "ff327d11-ae3b-95aa-8a7d-41269711ed55"
+    }
+
+response = requests.request("GET", url, headers=headers)
+print "Response for the url scan status http://apibeta.nsslabs.com/Scan/Status/url/{token=634DF6E7AC6742B187EC945871EBE4DC} request which returns NSS ID and status."
+print(response.text)
+
+import requests
+
+url = "http://apibeta.nsslabs.com/users/captures/NSS-2016-22PTTX"
+
+headers = {
+    'authorization': "Basic cGF0ZWxsYWJzOjI5OTJBMkQ0OEVEOTQyQTJBMzU5NkQ3NjJBNDQxNUJD",
+    'cache-control': "no-cache"
+    #'postman-token': "1a57c5e5-1321-e6ac-cbe4-05a3c0b2e7fc"
+    }
+
+response = requests.request("GET", url, headers=headers)
+print "Response for the URL scan results http://apibeta.nsslabs.com/users/captures/{nssid=NSS-2016-22PTTX} request which returns details for NSS ID."
+print(response.text)
+
+
+
+
+
+
+
+
+
+
+

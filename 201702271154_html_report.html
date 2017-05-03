@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function find_all(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sort_column(elem) {
+    toggle_sort_states(elem);
+    var colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    var key;
+    if (elem.classList.contains('numeric')) {
+        key = key_num;
+    } else if (elem.classList.contains('result')) {
+        key = key_result;
+    } else {
+        key = key_alpha;
+    }
+    sort_table(elem, key(colIndex));
+}
+
+function show_all_extras() {
+    find_all('.col-result').forEach(show_extras);
+}
+
+function hide_all_extras() {
+    find_all('.col-result').forEach(hide_extras);
+}
+
+function show_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.remove("collapsed");
+    expandcollapse.classList.remove("expander");
+    expandcollapse.classList.add("collapser");
+}
+
+function hide_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.add("collapsed");
+    expandcollapse.classList.remove("collapser");
+    expandcollapse.classList.add("expander");
+}
+
+function show_filters() {
+    var filter_items = document.getElementsByClassName('filter');
+    for (var i = 0; i < filter_items.length; i++)
+        filter_items[i].hidden = false;
+}
+
+function add_collapse() {
+    // Add links for show/hide all
+    var resulttable = find('table#results-table');
+    var showhideall = document.createElement("p");
+    showhideall.innerHTML = '<a href="javascript:show_all_extras()">Show all details</a> / ' +
+                            '<a href="javascript:hide_all_extras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    find_all('.col-result').forEach(function(elem) {
+        var extras = elem.parentNode.nextElementSibling;
+        var expandcollapse = document.createElement("span");
+        if (elem.innerHTML === 'Passed') {
+            extras.classList.add("collapsed");
+            expandcollapse.classList.add("expander");
+        } else {
+            expandcollapse.classList.add("collapser");
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener("click", function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains("collapsed")) {
+                show_extras(event.currentTarget);
+            } else {
+                hide_extras(event.currentTarget);
+            }
+        });
+    })
+}
+
+function init () {
+    reset_sort_headers();
+
+    add_collapse();
+
+    show_filters();
+
+    toggle_sort_states(find('.initial-sort'));
+
+    find_all('.sortable').forEach(function(elem) {
+        elem.addEventListener("click",
+                              function(event) {
+                                  sort_column(elem);
+                              }, false)
+    });
+
+};
+
+function sort_table(clicked, key_func) {
+    var rows = find_all('.results-table-row');
+    var reversed = !clicked.classList.contains('asc');
+    var sorted_rows = sort(rows, key_func, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    var thead = document.getElementById("results-table-head");
+    document.getElementById('results-table').remove();
+    var parent = document.createElement("table");
+    parent.id = "results-table";
+    parent.appendChild(thead);
+    sorted_rows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName("BODY")[0].appendChild(parent);
+}
+
+function sort(items, key_func, reversed) {
+    var sort_array = items.map(function(item, i) {
+        return [key_func(item), i];
+    });
+    var multiplier = reversed ? -1 : 1;
+
+    sort_array.sort(function(a, b) {
+        var key_a = a[0];
+        var key_b = b[0];
+        return multiplier * (key_a >= key_b ? 1 : -1);
+    });
+
+    return sort_array.map(function(item) {
+        var index = item[1];
+        return items[index];
+    });
+}
+
+function key_alpha(col_index) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[col_index].firstChild.data.toLowerCase();
+    };
+}
+
+function key_num(col_index) {
+    return function(elem) {
+        return parseFloat(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function key_result(col_index) {
+    return function(elem) {
+        var strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+                       'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function reset_sort_headers() {
+    find_all('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    find_all('.sortable').forEach(function(elem) {
+        var icon = document.createElement("div");
+        icon.className = "sort-icon";
+        icon.textContent = "vvv";
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove("desc", "active");
+        elem.classList.add("asc", "inactive");
+    });
+}
+
+function toggle_sort_states(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        reset_sort_headers();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function is_all_rows_hidden(value) {
+  return value.hidden == false;
+}
+
+function filter_table(elem) {
+    var outcome_att = "data-test-result";
+    var outcome = elem.getAttribute(outcome_att);
+    class_outcome = outcome + " results-table-row";
+    var outcome_rows = document.getElementsByClassName(class_outcome);
+
+    for(var i = 0; i < outcome_rows.length; i++){
+        outcome_rows[i].hidden = !elem.checked;
+    }
+
+    var rows = find_all('.results-table-row').filter(is_all_rows_hidden);
+    var all_rows_hidden = rows.length == 0 ? true : false;
+    var not_found_message = document.getElementById("not-found-message");
+    not_found_message.hidden = !all_rows_hidden;
+}
+</script>
+    <p>Report generated on 27-Feb-2017 at 11:58:36 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.13.0</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>Platform</td>
+        <td>Darwin-16.4.0-x86_64-i386-64bit</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>2.7.10</td></tr></table>
+    <h2>Summary</h2>
+    <p>22 tests ran in 231.29 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">22 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable numeric" col="duration">Duration</th>
+          <th>Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="5">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_CAWS_2_2_API_Automation.py::test_Get_capture_count_from_Prod_CAWS_Server_10_144_192_71</td>
+          <td class="col-duration">0.11</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Today_Date in the unit test is : 20170227
+day string is: 20170227
+req is : http://10.144.192.71:8081 /Captures/List?DetectionDate= 20170227 :
+Get capture count from Prod CAWS Server 10.144.192.71  ;  Pass ; Counts found are : 37
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_CAWS_2_2_API_Automation.py::test_Get_capture_count_from_Prod_CAWS_Server_10_144_192_72</td>
+          <td class="col-duration">0.29</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>day string is: 20170227
+req is : http://10.144.192.72:8081 /Captures/List?DetectionDate= 20170227 :
+Get capture count from Prod CAWS Server 10.144.192.72  ;  Pass ; Counts found are : 37
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_CAWS_2_2_API_Automation.py::test_Get_capture_count_from_Prod_CAWS_Server_10_144_192_73</td>
+          <td class="col-duration">0.10</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>day string is: 20170227
+req is : http://10.144.192.73:8081 /Captures/List?DetectionDate= 20170227 :
+Get capture count from Prod CAWS Server 10.144.192.73  ;  Pass ; Counts found are : 37
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_CAWS_2_2_API_Automation.py::test_Get_capture_count_from_Prod_CAWS_Server_data_nsslabs_com</td>
+          <td class="col-duration">0.15</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>day string is: 20170227
+req is : https://data.nsslabs.com /Captures/List?DetectionDate= 20170227 :
+Get capture count from Prod CAWS Server https://data.nsslabs.com  ;  Pass ; Counts found are : 37
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_CAWS_2_2_API_Automation.py::test_Get_day_exploit_list_from_Prod_CAWS_Server_data_nsslabs_com</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">---------------------------- Captured stdout setup -----------------------------<br/>day string is: 20170227
+req is : https://data.nsslabs.com /Captures/List?DetectionDate= 20170227 :
+----------------------------- Captured stdout call -----------------------------<br/>NSS-2017-2DYHWX
+NSS-2017-2DYHWF
+NSS-2017-2DYHSC
+NSS-2017-2DYHS0
+NSS-2017-2DYHQR
+NSS-2017-2DYHQG
+NSS-2017-2DY8ML
+NSS-2017-2DY6K3
+NSS-2017-2DY6GN
+NSS-2017-2DY69T
+NSS-2017-2DY4F3
+NSS-2017-2DY3S1
+NSS-2017-2DY0G3
+NSS-2017-2DX0W5
+NSS-2017-2DWLR7
+NSS-2017-2DW5FK
+NSS-2017-2DVNMR
+NSS-2017-2DVNKQ
+NSS-2017-2DTS9X
+NSS-2017-2DTJW1
+NSS-2017-2DTDRB
+NSS-2017-2DTDM7
+NSS-2017-2DTDM1
+NSS-2017-2DTDM3
+NSS-2017-2DTDLG
+NSS-2017-2DTDM0
+NSS-2017-2DTDLX
+NSS-2017-2DTDLV
+NSS-2017-2DTDLS
+NSS-2017-2DTDLR
+NSS-2017-2DTDLM
+NSS-2017-2DTDLK
+NSS-2017-2DTDLP
+NSS-2017-2DTDL0
+NSS-2017-2DTDKS
+NSS-2017-2DTDKV
+NSS-2017-2DTDKP
+Get capture count from Prod CAWS Server https://data.nsslabs.com  ;  Pass ; Counts found are : 37
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_CAWS_2_2_API_Automation.py::test_Get_day_exploits_list_with_files_list</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Capture count is : 37
+nss id is : NSS-2017-2DYHWX : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DYHWF : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DYHSC : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DYHS0 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DYHQR : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DYHQG : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DY8ML : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DY6K3 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DY6GN : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DY69T : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DY4F3 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DY3S1 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DY0G3 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DX0W5 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DWLR7 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DW5FK : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DVNMR : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DVNKQ : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTS9X : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTJW1 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDRB : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDM7 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDM1 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDM3 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDLG : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDM0 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDLX : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDLV : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDLS : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDLR : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDLM : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDLK : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDLP : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDL0 : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDKS : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDKV : Total files for the NSSid is : 0 NO Files for NSS id
+nss id is : NSS-2017-2DTDKP : Total files for the NSSid is : 0 NO Files for NSS id
+Get_day_exploits_list_with_files_list from Prod CAWS Server https://data.nsslabs.com  ;  Warning ; Counts found are : 0
+program is done.
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[DOC_doc.doc-Windows7-Microsoft Office 2013]</td>
+          <td class="col-duration">0.67</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">---------------------------- Captured stdout setup -----------------------------<br/>Todays date is: 2017-02-27
+Todays date n time  is: 2017-02-27-11-54-46
+----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:54:46.796944 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/DOC_doc.doc ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash 3F0833BF776C4F5FB0DCAFBC16129479"}
+token is : None for file name :  DOC_doc.doc submitted at : 2017-02-27 11:54:46.796944 token length =  4 3F0833BF776C4F5FB0DCAFBC16129479 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[DOC_docx.docx-Windows7-Microsoft Office 2013]</td>
+          <td class="col-duration">0.11</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:54:46.911487 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/DOC_docx.docx ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash 4547FEA86C7D79AE62A4118105F80DEB"}
+token is : None for file name :  DOC_docx.docx submitted at : 2017-02-27 11:54:46.911487 token length =  4 4547FEA86C7D79AE62A4118105F80DEB 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[1_mb_xls_save_as.xls-Windows7-Microsoft Office 2013]</td>
+          <td class="col-duration">62.11</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:55:49.027441 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/1_mb_xls_save_as.xls ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash B9A7A82C97D7247632D2742C3FE7CAC7"}
+token is : None for file name :  1_mb_xls_save_as.xls submitted at : 2017-02-27 11:55:49.027441 token length =  4 B9A7A82C97D7247632D2742C3FE7CAC7 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[1_mb_xlsx_saveas.xlsx-Windows7-Microsoft Office 2013]</td>
+          <td class="col-duration">52.65</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:56:41.680312 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/1_mb_xlsx_saveas.xlsx ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash B817FBEDAEC3B943D2E09C83870A3374"}
+token is : None for file name :  1_mb_xlsx_saveas.xlsx submitted at : 2017-02-27 11:56:41.680312 token length =  4 B817FBEDAEC3B943D2E09C83870A3374 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[DOC_csv.csv-Windows7-Microsoft Office 2013]</td>
+          <td class="col-duration">0.08</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:56:41.760738 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/DOC_csv.csv ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash 31B2888F14468A472A328F434145D800"}
+token is : None for file name :  DOC_csv.csv submitted at : 2017-02-27 11:56:41.760738 token length =  4 31B2888F14468A472A328F434145D800 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[DOC_pps.pps.ppt-Windows7-Microsoft Office 2013]</td>
+          <td class="col-duration">6.27</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:56:48.032226 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/DOC_pps.pps.ppt ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash E991DD3E28A609B24F308116DBAAE317"}
+token is : None for file name :  DOC_pps.pps.ppt submitted at : 2017-02-27 11:56:48.032226 token length =  4 E991DD3E28A609B24F308116DBAAE317 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[1_mb_ppt_saveass.pptx-Windows7-Microsoft Office 2013]</td>
+          <td class="col-duration">17.63</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:57:05.662862 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/1_mb_ppt_saveass.pptx ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash 9A9F4A48347114EA7222C4152A5A018A"}
+token is : None for file name :  1_mb_ppt_saveass.pptx submitted at : 2017-02-27 11:57:05.662862 token length =  4 9A9F4A48347114EA7222C4152A5A018A 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[DOC_pdf.pdf-Windows7-Adobe Reader DC 2015.017.20050]</td>
+          <td class="col-duration">5.99</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:57:11.650142 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/DOC_pdf.pdf ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash DBE9C6AB669B200CF51B18E0E3EB8ABE"}
+token is : None for file name :  DOC_pdf.pdf submitted at : 2017-02-27 11:57:11.650142 token length =  4 DBE9C6AB669B200CF51B18E0E3EB8ABE 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[DOC_pdf.pdf-Windows7-Adobe Reader DC 2015.007.20033]</td>
+          <td class="col-duration">7.80</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:57:19.449477 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/DOC_pdf.pdf ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash DBE9C6AB669B200CF51B18E0E3EB8ABE"}
+token is : None for file name :  DOC_pdf.pdf submitted at : 2017-02-27 11:57:19.449477 token length =  4 DBE9C6AB669B200CF51B18E0E3EB8ABE 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[DOC_pdf.pdf-Windows7-Adobe Reader 9.4]</td>
+          <td class="col-duration">2.96</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:57:22.406923 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/DOC_pdf.pdf ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash DBE9C6AB669B200CF51B18E0E3EB8ABE"}
+token is : None for file name :  DOC_pdf.pdf submitted at : 2017-02-27 11:57:22.406923 token length =  4 DBE9C6AB669B200CF51B18E0E3EB8ABE 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[DOC_pdf.pdf-Windows7-Adobe Reader DC 2015.020.20039]</td>
+          <td class="col-duration">7.60</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:57:30.004105 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/DOC_pdf.pdf ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash DBE9C6AB669B200CF51B18E0E3EB8ABE"}
+token is : None for file name :  DOC_pdf.pdf submitted at : 2017-02-27 11:57:30.004105 token length =  4 DBE9C6AB669B200CF51B18E0E3EB8ABE 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[SampleAudio_0.5mb.mp3-Windows7-Quicktime 7.79]</td>
+          <td class="col-duration">17.63</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:57:47.638039 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/SampleAudio_0.5mb.mp3 ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08"}
+token is : None for file name :  SampleAudio_0.5mb.mp3 submitted at : 2017-02-27 11:57:47.638039 token length =  4 8FB87DCD1674276F368AD0126454EF08 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[SampleAudio_0.5mb.mp3-Windows7-Itunes 12.5.1]</td>
+          <td class="col-duration">12.82</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:58:00.454842 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/SampleAudio_0.5mb.mp3 ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08"}
+token is : None for file name :  SampleAudio_0.5mb.mp3 submitted at : 2017-02-27 11:58:00.454842 token length =  4 8FB87DCD1674276F368AD0126454EF08 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[SampleAudio_0.5mb.mp3-Windows7-Itunes 12.5.4]</td>
+          <td class="col-duration">10.09</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:58:10.546432 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/SampleAudio_0.5mb.mp3 ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08"}
+token is : None for file name :  SampleAudio_0.5mb.mp3 submitted at : 2017-02-27 11:58:10.546432 token length =  4 8FB87DCD1674276F368AD0126454EF08 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[SampleAudio_0.5mb.mp3-Windows7-VLC 2.2.3]</td>
+          <td class="col-duration">16.06</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:58:26.612461 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/SampleAudio_0.5mb.mp3 ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08"}
+token is : None for file name :  SampleAudio_0.5mb.mp3 submitted at : 2017-02-27 11:58:26.612461 token length =  4 8FB87DCD1674276F368AD0126454EF08 32
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_file_submit.py::test_submit_file[SampleAudio_0.5mb.mp3-Windows7-VLC 2.2.4]</td>
+          <td class="col-duration">9.86</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="5">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Response for the http://apibeta.nsslabs.com/Scan/file/ request which returns the token : 
+2017-02-27 11:58:36.475556 ; /Users/apatel/Documents/workspace/CAWS_API_2.2/files_for_summit_source/SampleAudio_0.5mb.mp3 ; {"Message":"This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08"}
+token is : None for file name :  SampleAudio_0.5mb.mp3 submitted at : 2017-02-27 11:58:36.475556 token length =  4 8FB87DCD1674276F368AD0126454EF08 32
+</div></td></tr></tbody></table></body></html>

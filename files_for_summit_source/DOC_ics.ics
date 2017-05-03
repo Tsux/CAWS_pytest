@@ -1,0 +1,93 @@
+BEGIN:VCALENDAR
+PRODID:-//Microsoft Corporation//Outlook 12.0 MIMEDIR//EN
+VERSION:2.0
+METHOD:REQUEST
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VTIMEZONE
+TZID:Central Standard Time
+BEGIN:STANDARD
+DTSTART:16011104T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=11
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0600
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010311T020000
+RRULE:FREQ=YEARLY;BYDAY=2SU;BYMONTH=3
+TZOFFSETFROM:-0600
+TZOFFSETTO:-0500
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;CN="Walt Giroir";RSVP=TRUE:mailto:wgiroir@mezeosoftware.com
+ATTENDEE;CN="Dave Lopez";RSVP=TRUE:mailto:dlopez@mezeosoftware.com
+ATTENDEE;CN="Deepak Kanwar";RSVP=TRUE:mailto:dkanwar@mezeosoftware.com
+ATTENDEE;CN="John Eastman";RSVP=TRUE:mailto:jeastman@mezeosoftware.com
+ATTENDEE;CN="Travis Mclane";RSVP=TRUE:mailto:tmclane@mezeosoftware.com
+ATTENDEE;CN="Neema Rezaee";RSVP=TRUE:mailto:nrezaee@mezeosoftware.com
+CATEGORIES:Red Category
+CLASS:PUBLIC
+CREATED:20080801T200553Z
+DESCRIPTION:Updated the appt to include/invite Neema and Travis.   Travis i
+	f possible\, can you please attend.  Vipana has already sent an agenda tha
+	t includes questions on your test scripts.\n\nThanx.\n\n\n\nYou are invite
+	d\, but not required\, to attend the weekly call with Vipana\, Wednesday m
+	ornings at 8am.    Walt and Jason call from the boardroom for the meeting.
+	\n\nThis is a Skype call.   Please provide your SkypeID if not already pro
+	vided to the group (Travis I do not have yours).\n\nJ.\n\n\n\n\nOld Conf N
+	umber (Vipana - Niraj):  917-522-8104  (x29)\n
+DTEND;TZID="Central Standard Time":20080820T083000
+DTSTAMP:20080715T143151Z
+DTSTART;TZID="Central Standard Time":20080820T080000
+LAST-MODIFIED:20080801T200553Z
+LOCATION:Boardroom
+ORGANIZER;CN="Jason Hoover":mailto:jhoover@mezeosoftware.com
+PRIORITY:5
+RECURRENCE-ID;TZID="Central Standard Time":20080820T080000
+SEQUENCE:3
+SUMMARY;LANGUAGE=en-us:Weekly Call with Vipana
+TRANSP:OPAQUE
+UID:040000008200E00074C5B7101A82E00800000000A0FAD9C77DD0C801000000000000000
+	010000000ADB721079FDCDA40844F3FEC336BF02A
+X-ALT-DESC;FMTTYPE=text/html:<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//E
+	N">\n<HTML>\n<HEAD>\n<META NAME="Generator" CONTENT="MS Exchange Server ve
+	rsion 08.00.0681.000">\n<TITLE></TITLE>\n</HEAD>\n<BODY>\n<!-- Converted f
+	rom text/rtf format -->\n\n<P DIR=LTR><SPAN LANG="en-us"><I><FONT COLOR="#
+	0000FF" FACE="Calibri">Updated the appt to include/invite Neema and Travis
+	.&nbsp\;&nbsp\; Travis if possible\, can you please attend.&nbsp\;</FONT> 
+	<FONT COLOR="#0000FF" FACE="Calibri">Vipana has already sent an agenda tha
+	t includes questions</FONT></I></SPAN><SPAN LANG="en-us"><I> <FONT COLOR="
+	#0000FF" FACE="Calibri">on your test scripts.</FONT></I></SPAN></P>\n\n<P 
+	DIR=LTR><SPAN LANG="en-us"><I><FONT COLOR="#0000FF" FACE="Calibri">Thanx.<
+	/FONT></I></SPAN></P>\n\n<P DIR=LTR><SPAN LANG="en-us"><I></I></SPAN></P>\
+	n\n<P DIR=LTR><SPAN LANG="en-us"><I></I></SPAN></P>\n\n<P DIR=LTR><SPAN LA
+	NG="en-us"></SPAN></P>\n\n<P DIR=LTR><SPAN LANG="en-us"><FONT FACE="Calibr
+	i">You are invited\, but not required\, to attend the weekly call with Vip
+	ana\,</FONT></SPAN><SPAN LANG="en-us"> <FONT FACE="Calibri">Wednesday</FON
+	T></SPAN><SPAN LANG="en-us"><FONT FACE="Calibri"> morning</FONT></SPAN><SP
+	AN LANG="en-us"><FONT FACE="Calibri">s</FONT></SPAN><SPAN LANG="en-us"><FO
+	NT FACE="Calibri"> at 8am.</FONT></SPAN><SPAN LANG="en-us"><FONT FACE="Cal
+	ibri">&nbsp\;&nbsp\;&nbsp\; Walt and Jason call from the boardroom</FONT> 
+	<FONT FACE="Calibri">for the meeting.</FONT></SPAN><SPAN LANG="en-us"></SP
+	AN></P>\n\n<P DIR=LTR><SPAN LANG="en-us"><FONT FACE="Calibri">This is a Sk
+	ype call.</FONT></SPAN><SPAN LANG="en-us"> <FONT FACE="Calibri">&nbsp\; Pl
+	ease provide your SkypeID if not already provided to the group</FONT></SPA
+	N><SPAN LANG="en-us"><FONT FACE="Calibri"> (Travis I do not have</FONT> <F
+	ONT FACE="Calibri">yours).</FONT></SPAN><SPAN LANG="en-us"></SPAN></P>\n\n
+	<P DIR=LTR><SPAN LANG="en-us"><FONT FACE="Calibri">J.</FONT></SPAN><SPAN L
+	ANG="en-us"></SPAN></P>\n<BR>\n<BR>\n<BR>\n\n<P DIR=LTR><SPAN LANG="en-us"
+	><I><FONT FACE="Calibri">Old Conf Number (Vipana</FONT><FONT FACE="Calibri
+	"> - Niraj</FONT><FONT FACE="Calibri">):&nbsp\;</FONT></I></SPAN><SPAN LAN
+	G="en-us"><I> <FONT FACE="Calibri">917-522-8104</FONT><FONT FACE="Calibri"
+	>&nbsp\; (x29)</FONT></I></SPAN><SPAN LANG="en-us"><I></I></SPAN></P>\n\n<
+	/BODY>\n</HTML>
+X-MICROSOFT-CDO-BUSYSTATUS:BUSY
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-DISALLOW-COUNTER:FALSE
+X-MS-OLK-ALLOWEXTERNCHECK:TRUE
+X-MS-OLK-APPTLASTSEQUENCE:3
+X-MS-OLK-APPTSEQTIME:20080715T143151Z
+X-MS-OLK-AUTOFILLLOCATION:FALSE
+X-MS-OLK-CONFTYPE:0
+END:VEVENT
+END:VCALENDAR

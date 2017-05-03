@@ -1,0 +1,16 @@
+<SimulatorConfiguration version="1.0" hardwareid="0x84000D03" flashSize="32768" platformVersion="1.8.0.0" vendorID="0">
+   <ALXSources>.</ALXSources>
+   <Application>net.rim.java.tasks</Application>
+   <Application>net.rim.java.memopad</Application>
+   <Application>net.rim.medialoader.video</Application>
+   <Application>net.rim.java.docViewer</Application>
+   <Application>net.rim.java.passwordkeeper</Application>
+   <Application>net.rim.java.blackberrymessenger</Application>
+   <Application>net.rim.blackberry.lang.en_GB</Application>
+   <Application>net.rim.java.phone</Application>
+   <Application>net.rim.java.browser</Application>
+  <Application>net.rim.java.browser.javascript</Application>
+   <ApplicationExclude>net.rim.BBXpEnabler</ApplicationExclude>
+   <ApplicationExclude>net.rim.java.batterylog</ApplicationExclude>
+   <ApplicationExclude>net.rim.java.quincy</ApplicationExclude>
+</SimulatorConfiguration>
