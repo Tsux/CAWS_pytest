@@ -182,7 +182,7 @@ def test_submit_file(file_name, platform, application, file_submit_log):
     print "url is: ", url, "token is: ", token, "for file name: ", file_name, "submitted at: ", now, \
         "token length = ", len(token), hash, len(hash)
 
-2
+
 @pytest.mark.parametrize("file_name, platform, application",
                          [
                              # Microsoft Office with windows 7.
