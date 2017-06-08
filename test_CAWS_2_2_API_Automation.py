@@ -2,10 +2,10 @@
 #from html import HTML
 from datetime import datetime
 import CAWS_API_2_2_4 as c, pytest
-from _pytest.runner import fail
 import test_exp
+from _pytest.runner import fail
 
-#Today_Date = datetime.now().strftime("%Y-%m-%d")
+
 Today_Date = datetime.now().strftime("%Y%m%d")
 
 '''
@@ -37,7 +37,7 @@ def start_up_config(request):
 
     
 def test_Get_capture_count_from_Prod_CAWS_Server_10_144_192_71():
-    # Testing all App server's API health.
+    """Tests all App server's API health"""
     print "Today_Date in the unit test is :", Today_Date
     TestCase = "Get capture count from Prod CAWS Server 10.144.192.71"
     Result_capture_count = "Fail"

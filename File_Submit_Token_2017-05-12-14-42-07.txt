@@ -1,0 +1,1 @@
+2017-05-12 14:42:25.410685 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/DOC_doc.doc ; None ; This file was already submitted. Please get the information by using the file search with the hash 3F0833BF776C4F5FB0DCAFBC16129479 ; 3F0833BF776C4F5FB0DCAFBC16129479

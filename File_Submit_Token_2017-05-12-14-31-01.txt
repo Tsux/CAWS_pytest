@@ -1,0 +1,28 @@
+2017-05-12 14:31:08.494596 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/DOC_doc.doc ; None ; This file was already submitted. Please get the information by using the file search with the hash 3F0833BF776C4F5FB0DCAFBC16129479 ; 3F0833BF776C4F5FB0DCAFBC16129479
+2017-05-12 14:31:09.467190 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/DOC_docx.docx ; None ; This file was already submitted. Please get the information by using the file search with the hash 4547FEA86C7D79AE62A4118105F80DEB ; 4547FEA86C7D79AE62A4118105F80DEB
+2017-05-12 14:31:16.660718 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/1_mb_xls_save_as.xls ; None ; This file was already submitted. Please get the information by using the file search with the hash B9A7A82C97D7247632D2742C3FE7CAC7 ; B9A7A82C97D7247632D2742C3FE7CAC7
+2017-05-12 14:31:23.743427 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/1_mb_xlsx_saveas.xlsx ; None ; This file was already submitted. Please get the information by using the file search with the hash B817FBEDAEC3B943D2E09C83870A3374 ; B817FBEDAEC3B943D2E09C83870A3374
+2017-05-12 14:31:24.356755 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/DOC_csv.csv ; None ; This file was already submitted. Please get the information by using the file search with the hash 31B2888F14468A472A328F434145D800 ; 31B2888F14468A472A328F434145D800
+2017-05-12 14:31:29.469192 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/DOC_pps.pps.ppt ; None ; This file was already submitted. Please get the information by using the file search with the hash E991DD3E28A609B24F308116DBAAE317 ; E991DD3E28A609B24F308116DBAAE317
+2017-05-12 14:31:34.901463 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/1_mb_ppt_saveass.pptx ; None ; This file was already submitted. Please get the information by using the file search with the hash 9A9F4A48347114EA7222C4152A5A018A ; 9A9F4A48347114EA7222C4152A5A018A
+2017-05-12 14:31:37.397569 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/DOC_pdf.pdf ; None ; Invalid application submitted ; None
+2017-05-12 14:31:39.971288 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/DOC_pdf.pdf ; None ; This file was already submitted. Please get the information by using the file search with the hash DBE9C6AB669B200CF51B18E0E3EB8ABE ; DBE9C6AB669B200CF51B18E0E3EB8ABE
+2017-05-12 14:31:42.527736 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/DOC_pdf.pdf ; None ; This file was already submitted. Please get the information by using the file search with the hash DBE9C6AB669B200CF51B18E0E3EB8ABE ; DBE9C6AB669B200CF51B18E0E3EB8ABE
+2017-05-12 14:31:44.989282 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/DOC_pdf.pdf ; None ; This file was already submitted. Please get the information by using the file search with the hash DBE9C6AB669B200CF51B18E0E3EB8ABE ; DBE9C6AB669B200CF51B18E0E3EB8ABE
+2017-05-12 14:31:50.005493 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/SampleAudio_0.5mb.mp3 ; None ; This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08 ; 8FB87DCD1674276F368AD0126454EF08
+2017-05-12 14:31:56.368332 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/SampleAudio_0.5mb.mp3 ; None ; This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08 ; 8FB87DCD1674276F368AD0126454EF08
+2017-05-12 14:32:01.293972 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/SampleAudio_0.5mb.mp3 ; None ; This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08 ; 8FB87DCD1674276F368AD0126454EF08
+2017-05-12 14:32:06.580828 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/SampleAudio_0.5mb.mp3 ; None ; This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08 ; 8FB87DCD1674276F368AD0126454EF08
+2017-05-12 14:32:11.875566 ; /Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/SampleAudio_0.5mb.mp3 ; None ; This file was already submitted. Please get the information by using the file search with the hash 8FB87DCD1674276F368AD0126454EF08 ; 8FB87DCD1674276F368AD0126454EF08
+2017-05-12 14:32:18.218078 ; office_submit_files/empty_book.xlsx ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:19.287675 ; office_submit_files/empty_book_1.xls ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:19.757646 ; office_submit_files/empty_book_2.xls ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:22.954497 ; office_submit_files/empty_book.xlsx ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:23.300220 ; office_submit_files/empty_book_1.xls ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:23.661784 ; office_submit_files/empty_book_2.xls ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:27.136005 ; office_submit_files/empty_book.xlsx ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:27.530802 ; office_submit_files/empty_book_1.xls ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:27.980702 ; office_submit_files/empty_book_2.xls ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:31.632444 ; office_submit_files/empty_book.xlsx ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:32.159533 ; office_submit_files/empty_book_1.xls ; None ; Please add a correct platform. ; None
+2017-05-12 14:32:32.532549 ; office_submit_files/empty_book_2.xls ; None ; Please add a correct platform. ; None

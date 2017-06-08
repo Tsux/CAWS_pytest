@@ -53,7 +53,6 @@ def var1():
 @pytest.fixture(scope="module")
 def var2():
     return 2
-    
 
 
 #pytest --html=$(date +"%Y%m%d%H%M")_html_report.html   --capture=no
