@@ -52,7 +52,7 @@ def file_submit_log():
     Today_Date_time = utc_datetime.strftime("%Y-%m-%d-%H-%M-%S")
     Today_Date = utc_datetime.strftime("%Y-%m-%d")
     print "utc_datetime is:", utc_datetime, ":"
-    tmp_data_directory = "/Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/tmp/" + utc_datetime.strftime(
+    tmp_data_directory = "/CAWS_pytest/files_for_summit_source/tmp/" + utc_datetime.strftime(
         "%Y-%m-%d-%H-%M-%S") + "/"
     if not os.path.exists(tmp_data_directory):
         os.makedirs(tmp_data_directory)
@@ -66,7 +66,7 @@ def file_submit_log():
     file_list_dict = {}
     file_list_dict["submission_metadata"] = {
         "File_name": "None",
-        "File_location": "/Users/design/GitHub/CAWS_API_2.2_V1/files_for_summit_source/",
+        "File_location": "/CAWS_pytest/files_for_summit_source/",
         "Submit_file_location": tmp_data_directory,
         "Token_file_location": tmp_data_directory,
         "Submit_name": "None",
@@ -333,7 +333,7 @@ def submit_file(file_name, platform, application, file_submit_log):
     else:
         capture_token_string = str(now) + " ; " + subFile + " ; " + str(token) + " ; " + message + " ; " + str(hash)
 
-    FILE_SUBMIT_TOKEN_FILE = open("/Users/design/GitHub/CAWS_API_2.2_V1/File_Submit_Token_" + Today_Date_time + ".txt",
+    FILE_SUBMIT_TOKEN_FILE = open("/CAWS_pytest/File_Submit_Token_" + Today_Date_time + ".txt",
                                   'a+')
     FILE_SUBMIT_TOKEN_FILE.write(capture_token_string)
     FILE_SUBMIT_TOKEN_FILE.write("\n")
@@ -394,7 +394,7 @@ def check_file_submit_status(file_submit_log):
     print "file_list_dict is :"
     pprint.pprint(file_list_dict)
     capture_token_string = url + " ; " + token + " ; " + str(file_list_dict["NSSId"])
-    target_url = open("/Users/design/GitHub/CAWS_API_2.2_V1/URL_TOKEN_with_NSSId.txt", 'a+')
+    target_url = open("/CAWS_pytest/URL_TOKEN_with_NSSId.txt", 'a+')
     target_url.write(str(capture_token_string))
     target_url.write("\n")
     target_url.close()
